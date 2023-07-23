@@ -1,0 +1,29 @@
+#######################################
+# Syntax Coloring Map For MkaeMenu
+#######################################
+
+#######################################
+# Methods and Functions (KEYWORD1)
+#######################################
+
+SetNames    KEYWORD1
+SetFunc1    KEYWORD1
+SetFunc2    KEYWORD1
+SetFunc3    KEYWORD1
+SetProgressBarLine KEYWORD1
+SetBoolValueLine    KEYWORD1
+RunFunction1    KEYWORD1
+RunFunction2    KEYWORD1
+RunFunction3    KEYWORD1
+MakeMenu    KEYWORD1
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+QUANTITY_SCREENS	LITERAL1
+QUANTITY_LINES  LITERAL1
+IND_POSITION    LITERAL1
+START_BAR_POSITION  LITERAL1
+BAR_END_POSITION    LITERAL1
