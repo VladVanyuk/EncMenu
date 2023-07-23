@@ -85,7 +85,12 @@ Menu::Menu(LiquidCrystal_I2C* lcd)
     { // Resetting all arrays
         for (uint8_t j = 0; j < Lines; j++)
         {
+            #if defined(ESP8266)
+            screen[i][j] = 0;
+            #elif defined(__AVR__)
             screen[i][j] = '\0';
+            #endif
+        
             indicator[i][j] = 0;
             pointf1[i][j] = 0;
             pointf2[i][j] = 0;
@@ -97,31 +102,68 @@ Menu::Menu(LiquidCrystal_I2C* lcd)
     }
 }
 
+
+#if defined(__AVR__)
 void Menu::SetNames(uint8_t scr, uint8_t line, String item_name, uint16_t ind)
 {
     screen[scr][line] = item_name;
     indicator[scr][line] = ind;
 }
+#elif defined(ESP8266)
+void Menu::SetNames(uint8_t scr, uint8_t line, String item_name, uint16_t* ind)
+{
+    screen[scr][line] = item_name;
+    indicator[scr][line] = ind;
+}
+
+void Menu::SetNames(uint8_t scr, uint8_t line, String item_name, bool* ind)
+{
+    screen[scr][line] = item_name;
+    indicator[scr][line] = (uint16_t*)ind;
+}
+#endif
 
 void Menu::SetNames(uint8_t scr, uint8_t line, String item_name)
 {
     screen[scr][line] = item_name;
 }
 
+
+#if defined(__AVR__)
 void Menu::SetFunc1(uint8_t scr, uint8_t line, void *p)
 {
     pointf1[scr][line] = p;
 }
+#elif defined(ESP8266)
+void Menu::SetFunc1(uint8_t scr, uint8_t line, std::function<void(void)>p)
+{
+    pointf1[scr][line] = p;
+}
+#endif
 
+#if defined(__AVR__)
 void Menu::SetFunc2(uint8_t scr, uint8_t line, void *p)
 {
     pointf2[scr][line] = p;
 }
+#elif defined(ESP8266)
+void Menu::SetFunc2(uint8_t scr, uint8_t line, std::function<void(void)>p)
+{
+    pointf2[scr][line] = p;
+}
+#endif
 
+#if defined(__AVR__)
 void Menu::SetFunc3(uint8_t scr, uint8_t line, void *p)
 {
     pointf3[scr][line] = p;
 }
+#elif defined(ESP8266)
+void Menu::SetFunc3(uint8_t scr, uint8_t line, std::function<void(void)>p)
+{
+    pointf3[scr][line] = p;
+}
+#endif
 
 void Menu::SetProgressBarLine(uint8_t scr, uint8_t line, bool state)
 {
@@ -225,10 +267,17 @@ uint8_t Menu::GetLinesCount(uint8_t scr)
     uint8_t count = 0;
     for (uint8_t i = 0; i < Lines; i++)
     {
+        #if defined(__AVR__)
         if (screen[scr][i] != '\0')
         {
             count++;
         }
+        #elif defined(ESP8266)
+        if (screen[scr][i] != 0) 
+        {
+            count++;
+        }
+        #endif
     }
     return count;
 }
@@ -241,6 +290,7 @@ void Menu::RunFunction1()
         MakeMenu(UPDATE_LINE, UPDATE_SCREEN);
     }
 }
+
 
 void Menu::RunFunction2()
 {
@@ -329,8 +379,13 @@ void Menu::DisplayFocuceLines()
             draw_progressbar((uint16_t)*indicator[scr_num][line_index], line_to_print, START_BAR_POSITION);
         }
 
+        #if defined(__AVR__)
         if (screen[scr_num][line_index + 1] == '\0')
             break;
+        #elif defined(ESP8266)
+        if (screen[scr_num][line_index + 1] == 0) 
+            break;
+        #endif
         line_to_print++;
     }
 }
@@ -362,17 +417,34 @@ void Menu::MakeMenu(uint8_t f, uint8_t s)
     }
 
     // The null character signals the end of the list of strings/screens
+    #if defined(__AVR__)
     if (screen[scr_num][0] == '\0')
     {
         scr_num = 0;
         MakeMenu(UPDATE_LINE, UPDATE_SCREEN);
     }
+    #elif defined(ESP8266)
+    if (screen[scr_num][0] == 0) 
+    {
+        scr_num = 0;
+        MakeMenu(UPDATE_LINE, UPDATE_SCREEN);
+    }
+    #endif
 
+    #if defined(__AVR__)
     if (screen[scr_num][focuce] == '\0')
     {
         focuce--;
         MakeMenu(UPDATE_LINE, UPDATE_SCREEN);
     }
+    #elif defined(ESP8266)
+    if (screen[scr_num][focuce] == 0)
+    {
+        focuce--;
+        MakeMenu(UPDATE_LINE, UPDATE_SCREEN);
+    }
+    #endif
+
     if (focuce < 1)
         focuce = 1;
 

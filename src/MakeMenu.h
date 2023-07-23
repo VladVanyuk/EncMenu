@@ -43,7 +43,9 @@ private:
     LiquidCrystal_I2C *_lcd;
     uint8_t const static Lines = (QUANTITY_LINES + 1);
     uint8_t rows_to_update = LCD_ROW_COUNT - 1;
+    
     String screen[QUANTITY_SCREENS][Lines];       // Array of menu titles
+ 
     uint16_t focuce = 1, scr_num = 0;             // Focus variables(active line), screen numbers,
     uint16_t *indicator[QUANTITY_SCREENS][Lines]; // Array of indicator pointers (changing value at the end of the line)
 public:
@@ -56,9 +58,15 @@ public:
         bool bar_chars_inited : 1;
     } mFlags;
     
+    #if defined(ESP8266)
+    std::function<void(void)> pointf1[QUANTITY_SCREENS][Lines];
+    std::function<void(void)> pointf2[QUANTITY_SCREENS][Lines];
+    std::function<void(void)> pointf3[QUANTITY_SCREENS][Lines];
+    #elif defined(__AVR__)
     void (*pointf1[QUANTITY_SCREENS][Lines])(); // Array of pointers to the first attached function
     void (*pointf2[QUANTITY_SCREENS][Lines])(); // Array of pointers to the second attached function
     void (*pointf3[QUANTITY_SCREENS][Lines])(); // Array of pointers to the third attached function for encoder press button
+    #endif
     bool drawBar[QUANTITY_SCREENS][Lines];
     bool boolValue[QUANTITY_SCREENS][Lines];
     Menu(LiquidCrystal_I2C *lcd);
@@ -71,8 +79,12 @@ public:
      * @param item_name menu item name
      * @param ind  variable to display
      */
+    #if defined(ESP8266)
+    void SetNames(uint8_t scr, uint8_t line, String item_name, uint16_t* ind);
+    void SetNames(uint8_t scr, uint8_t line, String item_name, bool* ind);
+    #elif defined(__AVR__)
     void SetNames(uint8_t scr, uint8_t line, String item_name, uint16_t ind);
-
+    #endif
     /**
      * SetNames
      * Set the screen number, line, menu item name
@@ -89,7 +101,11 @@ public:
      * @param line screen line
      * @param p function to attach
      */
+    #if defined(__AVR__)
     void SetFunc1(uint8_t scr, uint8_t line, void *p);
+    #elif defined(ESP8266)
+    void SetFunc1(uint8_t scr, uint8_t line, std::function<void(void)>p);
+    #endif
 
     /**
      * SetFunc2
@@ -98,7 +114,11 @@ public:
      * @param line screen line
      * @param p function to attach
      */
+    #if defined(__AVR__)
     void SetFunc2(uint8_t scr, uint8_t line, void *p);
+    #elif defined(ESP8266)
+    void SetFunc2(uint8_t scr, uint8_t line, std::function<void(void)>p);
+    #endif
 
     /**
      * SetFunc3
@@ -107,7 +127,11 @@ public:
      * @param line screen line
      * @param p function to attach
      */
+    #if defined(__AVR__)
     void SetFunc3(uint8_t scr, uint8_t line, void *p);
+    #elif defined(ESP8266)
+    void SetFunc3(uint8_t scr, uint8_t line, std::function<void(void)>p);
+    #endif
 
     void SetProgressBarLine(uint8_t scr, uint8_t line, bool state);
 
