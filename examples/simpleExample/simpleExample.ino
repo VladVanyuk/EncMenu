@@ -105,10 +105,10 @@ uint16_t analogFan2 = 0;
 uint16_t analogFan3 = 0;
 uint16_t analogFan4 = 0;
 
-uint16_t percentageFan1 = 0; 
-uint16_t percentageFan2 = 0;
-uint16_t percentageFan3 = 0;
-uint16_t percentageFan4 = 0;
+int percentageFan1 = 0; 
+int percentageFan2 = 0;
+int percentageFan3 = 0;
+int percentageFan4 = 0;
 
 void lcdSetup(){
   lcd.clear();
@@ -128,48 +128,52 @@ void toggle_relay2 () {
   digitalWrite(RELAY_PIN2, state_relay2);
 }
 
-void brigh_up_led (byte pin, uint16_t bright) {
-  bright += 10;
-  bright = constrain (bright, 0, 255);
-  analogWrite(pin, bright);
-}
-
-void brigh_down_led (byte pin, uint16_t bright) {
-  bright -= 10;
-  bright = constrain (bright, 0, 255);
-  analogWrite(pin, bright);
-}
-
 void brigh_up_led1 () {
-  brigh_up_led(LED_PIN1, ledBright1);
+  ledBright1 += 10;
+  constrain (ledBright1, 0, 255);
+  analogWrite(LED_PIN1, ledBright1);
 }
 
 void brigh_down_led1 () {
-  brigh_down_led(LED_PIN1, ledBright1);
+  ledBright1 -= 10;
+  constrain (ledBright1, 0, 255);
+  analogWrite(LED_PIN1, ledBright1);
 }
 
 void brigh_up_led2 () {
-  brigh_up_led(LED_PIN2, ledBright2);
+  ledBright2 += 10;
+  constrain (ledBright2, 0, 255);
+  analogWrite(LED_PIN2, ledBright2);
 }
 
 void brigh_down_led2 () {
-  brigh_down_led(LED_PIN2, ledBright2);
+  ledBright2 -= 10;
+  constrain (ledBright2, 0, 255);
+  analogWrite(LED_PIN2, ledBright2);
 }
 
 void brigh_up_led3 () {
-  brigh_up_led(LED_PIN3, ledBright3);
+  ledBright3 += 10;
+  constrain (ledBright3, 0, 255);
+  analogWrite(LED_PIN3, ledBright3);
 }
 
 void brigh_down_led3 () {
-  brigh_down_led(LED_PIN3, ledBright3);
+  ledBright3 -= 10;
+  constrain (ledBright3, 0, 255);
+  analogWrite(LED_PIN3, ledBright3);
 }
 
 void brigh_up_led4 () {
-  brigh_up_led(LED_PIN4, ledBright4);
+  ledBright4 += 10;
+  constrain (ledBright4, 0, 255);
+  analogWrite(LED_PIN4, ledBright4);
 }
 
 void brigh_down_led4 () {
-  brigh_down_led(LED_PIN4, ledBright4);
+  ledBright4 -= 10;
+  constrain (ledBright4, 0, 255);
+  analogWrite(LED_PIN4, ledBright4);
 }
 
 
