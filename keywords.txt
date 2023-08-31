@@ -2,20 +2,32 @@
 # Syntax Coloring Map For MkaeMenu
 #######################################
 
+
 #######################################
-# Methods and Functions (KEYWORD1)
+# Datatypes (KEYWORD1)
 #######################################
 
-SetNames    KEYWORD1
-SetFunc1    KEYWORD1
-SetFunc2    KEYWORD1
-SetFunc3    KEYWORD1
-SetProgressBarLine KEYWORD1
-SetBoolValueLine    KEYWORD1
-RunFunction1    KEYWORD1
-RunFunction2    KEYWORD1
-RunFunction3    KEYWORD1
-MakeMenu    KEYWORD1
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+SetNames        KEYWORD2
+SetLineType     KEYWORD2
+SetFunc1        KEYWORD2
+SetFunc2        KEYWORD2
+SetFunc3        KEYWORD2
+RunFunction1    KEYWORD2
+RunFunction2    KEYWORD2
+RunFunction3    KEYWORD2
+SetMenuActive   KEYWORD2
+
+MakeMenu        KEYWORD2
+MenuNextLine    KEYWORD2
+MenuPrevLine    KEYWORD2
+MenuNextScreen  KEYWORD2
+MenuPrevScreen  KEYWORD2
+MenuUpdate      KEYWORD2
+MenuHandler     KEYWORD2
 
 
 #######################################
