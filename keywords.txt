@@ -11,7 +11,7 @@
 # Methods and Functions (KEYWORD2)
 #######################################
 
-SetNames        KEYWORD2
+SetLineValues        KEYWORD2
 SetLineType     KEYWORD2
 SetFunc1        KEYWORD2
 SetFunc2        KEYWORD2
@@ -21,7 +21,7 @@ RunFunction2    KEYWORD2
 RunFunction3    KEYWORD2
 SetMenuActive   KEYWORD2
 
-MakeMenu        KEYWORD2
+EncMenu        KEYWORD2
 MenuNextLine    KEYWORD2
 MenuPrevLine    KEYWORD2
 MenuNextScreen  KEYWORD2
