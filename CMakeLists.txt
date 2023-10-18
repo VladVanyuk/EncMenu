@@ -1,6 +1,5 @@
 # EncMenu Navigation System Library
-# https://github.com/VladVanyuk/EncMenuLib
-# MIT License
+# https://github.com/VladVanyuk/EncMenu
 
 cmake_minimum_required(VERSION 3.5)
 

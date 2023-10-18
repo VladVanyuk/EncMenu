@@ -61,47 +61,18 @@ struct MenuFlags
 };
 
 /**
- *  @brief Struct (Array) of line_value pointers (changing value at the end of the line)
+ *  @brief Struct display line parameters 
  */
 struct MenuLine
 {
-    String line_text;  // const char     *DisplayText;
-    value_t *line_value; // uint8_t  Linetype;
+    String line_text;  
+    value_t *line_value; 
     line_value_t val_type;
     line_t line_type;
-    // struct MenuLine *nextline; //line_struct
 };
+
 typedef struct MenuLine MenuLine_t;
 
 typedef void (*pointf_t)();
 typedef void (*obj_pointf_t)(void *);
 
-/*
-
-struct
-{
-   void  (*callfunc)(void *Socket);          // Function to call and arguments
-   U8 FunctionWorks;                         // 0 = Not tested, 1 = failed, 2 = Works
-} Dynamic;
-
-struct
-{
-   void  (*callfunc)(void *Socket, U32 Par); // Function to call and arguments
-   U32 Parameter;                            // Parameter to menu function
-   U8 FunctionWorks;                         // 0 = Not tested, 1 = failed, 2 = Works
-} DynamicParameter;
-
-struct menu_group_struct
-{
-   U32 MagicNumber;                    // A magic number to detect validity of data
-   char  *Name;                        // Menu group name
-   struct menu_struct *first_menu;     // Pointer to first menu in this group, zero if none
-   struct menu_struct *last_menu;      // Pointer to last menu in this group, zero if none
-   struct menu_group_struct *prev;     // Pointer to previus group, zero if first
-   struct menu_group_struct *next;     // Pointer to next group, zero if last.
-   struct button_struct *first_button; // Pointer to first button in group
-   struct button_struct *last_button;  // Pointer to last button in group
-};
-
-
-*/

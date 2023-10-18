@@ -1,18 +1,22 @@
 #ifndef EncMenu_h
-#define encMenu_h
+#define EncMenu_h
 
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 
+#include "EncButton.h"
+
 #include "MenuTypes.h"
 
-#ifndef LCD_ROW_COUNT
-#define LCD_ROW_COUNT 4
-#endif
 
-#ifndef LCD_COL_COUNT
+#define LCD_ROW_COUNT 4
+
+
+
 #define LCD_COL_COUNT 20
-#endif
+
+
+#define LCD_I2C_ADDRESS 0x27
 
 #ifndef MAX_SCREENS
 #define MAX_SCREENS 9 //was 6
@@ -35,6 +39,19 @@
 
 #define DEFAULT_BACKLIGHT_TIMEOUT 30000 // 30 sec
 
+#define DEBUG_MENU_SERIAL 1
+#define MENU_ENC_ISR 0 // to do
+
+#if (DEBUG_MENU_SERIAL == 1)
+#define MenuDebugPrint(x)   Serial.print(x)
+#define MenuDebugPrintln(x) Serial.println(x)
+#else
+#define MenuDebugPrint(x)  
+#define MenuDebugPrintln(x) 
+#endif
+
+
+#define ENC_ISR() encIsr()
 
 /**
  * @class Menu
@@ -43,6 +60,9 @@ class Menu
 {
 private:
    LiquidCrystal_I2C *_lcd;
+
+   EncButton *enc;
+   //VirtEncButton *enc;
 
    uint8_t const static Screens = (MAX_SCREENS+1);
    uint8_t const static Lines = (MAX_LINES+1);
@@ -53,8 +73,8 @@ private:
    uint16_t *printed_lines_indicator[3] = {NULL, NULL, NULL}; // Array of pointers to current printed values
    uint8_t rows_to_update = LCD_ROW_COUNT - 1;
    
-  // String screen[Screens][Lines];                             // Array of menu titles
-   MenuLine_t lines[Screens][Lines];    // Array of line_value pointers (changing value at the end of the line)
+   //line descriptor
+   MenuLine_t lines[Screens][Lines];   
 
    char cursor_icon = 0x7E; //->
    char edit_cursor_icon = '>';
@@ -62,7 +82,8 @@ private:
    uint32_t backlight_timeout = DEFAULT_BACKLIGHT_TIMEOUT; // 30 sec default
 
 public:
-   Menu(LiquidCrystal_I2C *lcd);
+   Menu();
+   Menu(LiquidCrystal_I2C *lcd, EncButton *encB);
 
    MenuFlags mFlags = {};
 
@@ -87,10 +108,7 @@ public:
     * @param item_name menu item name
     * @param ind  variable to display
     */
-   // void SetLineValues(uint8_t scr, uint8_t line, String item_name, uint16_t* ind, line_t line_type = NORMAL);
    void SetLineValues(uint8_t scr, uint8_t line, String item_name, void* ind_val, line_value_t val_type = U16_t, line_t line_type = NORMAL);
-
-   //void SetLineValuesFromStruct(uint8_t scr, uint8_t line, String item_name, void* ind, line_t line_type = NORMAL);
 
    /**
     * @fn SetLineValues
@@ -228,6 +246,8 @@ public:
    void MenuSwitchToScreen(uint8_t scr);
    void MenuHandler();
 
+   void encIsr();
+   void MenuEncHandler();
 
 private:
    /**
@@ -290,4 +310,4 @@ private:
    //void GetLineValueType(MenuLine_t *line_ptr);
 };
 
-#endif // MakeMenu_h
+#endif // EncMenu_h
