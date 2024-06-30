@@ -1,63 +1,9 @@
-#include <Arduino.h>
 #include "EncMenu.h"
 
-#ifndef CLK
-#define CLK 2
-#endif
-
-#ifndef DT
-#define DT 3
-#endif
-
-#ifndef SW
-#define SW 4
-#endif
-
-// static void Menu::encIsr()
-// {
-//     this->enc->tickISR();
-//     this->mFlags.menuActive_f = true;
-//     MenuDebugPrintln("isr");
-// }
-
-Menu::Menu()
+Menu::Menu(LiquidCrystal_I2C *lcd)
 {
-    MenuDebugPrintln("obj new");
-   
-        _lcd = new LiquidCrystal_I2C(LCD_I2C_ADDRESS, LCD_COL_COUNT, LCD_ROW_COUNT);
-        _lcd->clear();
-        _lcd->init();
-        _lcd->backlight();
-        MenuDebugPrintln("lcd new");
-
-        #if (MENU_ENC_ISR == 1)
-        // attachInterrupt(0, encIsr, CHANGE);  
-        // attachInterrupt(1, encIsr, CHANGE);
-        
-        enc = new EncButtonMenu(CLK, DT, SW, INPUT_PULLUP);
-        #else
-        enc = new EncButton(CLK, DT, SW, INPUT_PULLUP);
-        #endif
-        MenuDebugPrintln("enc new");
-}
-
-// ex: menu_main = new Menu(&lcd, &encB);
-Menu::Menu(LiquidCrystal_I2C *lcd, EncButton *encB)
-{   
-   if (lcd != NULL)
-    {
-        _lcd = lcd;
-        _lcd->clear();
-        _lcd->init();
-        _lcd->backlight();
-    }
-    
+    _lcd = lcd;
     ResetMenu();
-
-    if (encB != NULL)
-    {
-        enc = encB;
-    }
 }
 
 void Menu::ResetMenu()
@@ -84,7 +30,6 @@ void Menu::ResetMenu()
             obj_pointf3[i][j] = NULL;
         }
     }
-    
 }
 
 void  Menu::SetLineValues(uint8_t scr, uint8_t line, String item_name, void* ind_val, line_value_t value_type = U16_t, line_t line_type = NORMAL)
@@ -93,6 +38,13 @@ void  Menu::SetLineValues(uint8_t scr, uint8_t line, String item_name, void* ind
     lines[scr][line].line_value =(value_t*)ind_val;
     lines[scr][line].val_type = value_type;
     lines[scr][line].line_type = line_type;
+
+   
+    //   Serial.println(item_name);
+    //   Serial.println(lines[scr][line].line_value->u8);
+    //   Serial.println(lines[scr][line].line_value->u16);
+    //   Serial.println(lines[scr][line].val_type);
+    //   Serial.println(lines[scr][line].line_type);
 }
 
 
@@ -102,6 +54,12 @@ void Menu::SetLineValues(uint8_t scr, uint8_t line, String item_name, line_t lin
     lines[scr][line].line_value = 0; //NULL
     lines[scr][line].val_type = NO_TYPE;
     lines[scr][line].line_type = line_type;
+
+    // Serial.println(item_name);
+    //  Serial.println(lines[scr][line].line_value->u8);
+    //  Serial.println(lines[scr][line].line_value->u16);
+    //  Serial.println(lines[scr][line].val_type);
+    //  Serial.println(lines[scr][line].line_type);
 }
 
 void Menu::SetFunc1(uint8_t scr, uint8_t line, void *func_p)
@@ -356,70 +314,8 @@ void Menu::SetMenuUpdate()
     mFlags.menuUpdate_f = true;
 }
 
-void Menu::MenuEncHandler()
-{
-    switch (enc->action()) {
-        case EB_PRESS:
-            MenuDebugPrintln("press");
-            break;
-        case EB_HOLD:
-            MenuDebugPrintln("hold");
-            break;
-        case EB_STEP:
-            MenuDebugPrintln("step");
-            break;
-        case EB_RELEASE:
-            MenuDebugPrint("release. steps: ");
-            MenuDebugPrint(enc->getSteps());
-            MenuDebugPrint(", press for: ");
-            MenuDebugPrint(enc->pressFor());
-            MenuDebugPrint(", hold for: ");
-            MenuDebugPrint(enc->holdFor());
-            MenuDebugPrint(", step for: ");
-            MenuDebugPrintln(enc->stepFor());
-            break;
-        case EB_CLICK:
-            MenuDebugPrintln("click");
-            break;
-        case EB_CLICKS:
-            MenuDebugPrint("clicks ");
-            MenuDebugPrintln(enc->getClicks());
-            break;
-        case EB_TURN:
-            MenuDebugPrint("turn ");
-            MenuDebugPrint(enc->dir());
-            MenuDebugPrint(" ");
-            MenuDebugPrint(enc->fast());
-            MenuDebugPrint(" ");
-            MenuDebugPrintln(enc->pressing());
-            break;
-        case EB_REL_HOLD:
-            MenuDebugPrintln("release hold");
-            break;
-        case EB_REL_HOLD_C:
-            MenuDebugPrint("release hold clicks ");
-            MenuDebugPrintln(enc->getClicks());
-            break;
-        case EB_REL_STEP:
-            MenuDebugPrintln("release step");
-            break;
-        case EB_REL_STEP_C:
-            MenuDebugPrint("release step clicks ");
-            MenuDebugPrintln(enc->getClicks());
-            break;
-        //default:
-           // MenuDebugPrintln();
-    }
-}
-
 void Menu::MenuHandler()
 {
-    #if (MENU_ENC_ISR == 0)
-        this->enc->tick();
-    #endif    
-    
-    MenuEncHandler();
-
     if (mFlags.menuActive_f == true)
     {
         if (mFlags.menuUpdate_f == true)

@@ -1,4 +1,9 @@
 
+#ifndef MENUSYMBOLS_H
+#define MENUSYMBOLS_H
+
+#include <Arduino.h>
+
 byte bar_start_0[8]= {
     B01111,
     B11000,
@@ -89,3 +94,4 @@ byte up_arrow[8]= {
     0b00100,
     0b00100};
 
+#endif

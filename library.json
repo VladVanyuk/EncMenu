@@ -5,7 +5,7 @@
   "repository":
   {
     "type": "git",
-    "url": "https://github.com/VladVanyuk/EncMenuLib.git"
+    "url": "https://github.com/VladVanyuk/EncMenu.git"
   },
   "frameworks": "arduino",
   "platforms":
