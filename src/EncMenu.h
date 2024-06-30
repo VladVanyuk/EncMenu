@@ -42,7 +42,8 @@ class Menu
 {
 private:
    LiquidCrystal_Base *_lcd=NULL;
-   VirtEncButton *_encB=NULL;
+   // VirtEncButton *_encB=NULL;
+   EncButton *_encB=NULL;
 
    uint8_t const static Screens = (MAX_SCREENS+1);
    uint8_t const static Lines = (MAX_LINES+1);
@@ -63,7 +64,7 @@ private:
 
 public:
    Menu()=default;
-   Menu(VirtEncButton * encB, LiquidCrystal_Base *lcd=NULL);
+   Menu(EncButton * encB, LiquidCrystal_Base *lcd=NULL);
 
    MenuFlags mFlags = {};
 

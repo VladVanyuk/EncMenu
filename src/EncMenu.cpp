@@ -8,7 +8,7 @@
 //     ResetMenu();
 // }
 
-Menu::Menu(VirtEncButton * encB, LiquidCrystal_Base *lcd=NULL)
+Menu::Menu(EncButton * encB, LiquidCrystal_Base *lcd)
 {
     if (encB != NULL)
     {
@@ -16,7 +16,7 @@ Menu::Menu(VirtEncButton * encB, LiquidCrystal_Base *lcd=NULL)
     }
     else
     {
-        _encB = new VirtEncButton(ENC_CLK, ENC_DT, ENC_SW, INPUT_PULLUP);
+        // _encB = new VirtEncButton(ENC_CLK, ENC_DT, ENC_SW, INPUT_PULLUP);
     }
 
    
@@ -361,6 +361,23 @@ void Menu::SetMenuUpdate()
 
 void Menu::MenuHandler()
 {
+    if (_encB)
+    {
+        _encB->tick();
+        if (_encB->hasClicks() && CheckFunction3())
+        {
+            RunFunction3();
+        }
+        else if (_encB->hasClicks())
+        {
+            Serial.println("Clicked");
+        }
+            
+       
+       
+        
+    }
+    
     if (mFlags.menuActive_f == true)
     {
         if (mFlags.menuUpdate_f == true)
