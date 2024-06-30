@@ -2,8 +2,8 @@
 #define encMenu_h
 
 #include <Arduino.h>
-#include <LiquidCrystal_I2C.h>
-
+#include <LiquidCrystal_Base.h>
+#include <EncButton.h>
 #include "MenuTypes.h"
 
 #ifndef LCD_ROW_COUNT
@@ -23,7 +23,6 @@
 #endif
 
 #define DEFAULT_LINE 0
-
 #define START_BAR_POSITION 8 // to do
 
 #ifndef BAR_END_POSITION
@@ -42,7 +41,8 @@
 class Menu
 {
 private:
-   LiquidCrystal_I2C *_lcd;
+   LiquidCrystal_Base *_lcd=NULL;
+   VirtEncButton *_encB=NULL;
 
    uint8_t const static Screens = (MAX_SCREENS+1);
    uint8_t const static Lines = (MAX_LINES+1);
@@ -62,7 +62,8 @@ private:
    uint32_t backlight_timeout = DEFAULT_BACKLIGHT_TIMEOUT; // 30 sec default
 
 public:
-   Menu(LiquidCrystal_I2C *lcd);
+   Menu()=default;
+   Menu(VirtEncButton * encB, LiquidCrystal_Base *lcd=NULL);
 
    MenuFlags mFlags = {};
 
@@ -77,6 +78,8 @@ public:
 
    uint32_t backlight_timer = 0;
    
+   void init();
+
    void ResetMenu();
 
    /**
@@ -106,9 +109,9 @@ public:
     * @brief Installing the first attached function
     * @param scr  screen number
     * @param line screen line
-    * @param p function to attach
+    * @param func_p function to attach
     */
-   void SetFunc1(uint8_t scr, uint8_t line, void *p);
+   void SetFunc1(uint8_t scr, uint8_t line, void *func_p);
    void SetFunc1(uint8_t scr, uint8_t line, void (*listener)(void *object), void *object);
 
    /**
@@ -116,9 +119,9 @@ public:
     * @brief Installing the second attached function
     * @param scr  screen number
     * @param line screen line
-    * @param p function to attach
+    * @param func_p function to attach
     */
-   void SetFunc2(uint8_t scr, uint8_t line, void *p);
+   void SetFunc2(uint8_t scr, uint8_t line, void *func_p);
    void SetFunc2(uint8_t scr, uint8_t line, void (*listener)(void *object), void *object);
 
    /**
@@ -126,9 +129,9 @@ public:
     * @brief Installing the third attached function
     * @param scr  screen number
     * @param line screen line
-    * @param p function to attach
+    * @param func_p function to attach
     */
-   void SetFunc3(uint8_t scr, uint8_t line, void *p);
+   void SetFunc3(uint8_t scr, uint8_t line, void *func_p);
    void SetFunc3(uint8_t scr, uint8_t line, void (*listener)(void *object), void *object);
 
    /**

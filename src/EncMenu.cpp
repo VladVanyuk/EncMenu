@@ -1,9 +1,47 @@
+#include <Arduino.h>
 #include "EncMenu.h"
 
-Menu::Menu(LiquidCrystal_I2C *lcd)
+// Menu::Menu()
+// {
+//     _lcd = new LiquidCrystal_I2C(0x27, LCD_COL_COUNT, LCD_ROW_COUNT);
+//     _lcd->begin();
+//     ResetMenu();
+// }
+
+Menu::Menu(VirtEncButton * encB, LiquidCrystal_Base *lcd=NULL)
 {
-    _lcd = lcd;
+    if (encB != NULL)
+    {
+        _encB = encB;
+    }
+    else
+    {
+        _encB = new VirtEncButton(ENC_CLK, ENC_DT, ENC_SW, INPUT_PULLUP);
+    }
+
+   
+    
+    if(lcd != NULL)
+    {
+        _lcd = lcd;
+    }
+    else
+    {
+
+        _lcd = new LiquidCrystal_I2C(0x27, LCD_COL_COUNT, LCD_ROW_COUNT);
+        // _lcd->begin();
+        ResetMenu();
+    }
     ResetMenu();
+}
+
+
+void Menu::init()//todo name properly
+{
+    if (_lcd != NULL)
+    {
+        _lcd->begin();
+    }
 }
 
 void Menu::ResetMenu()
@@ -64,10 +102,10 @@ void Menu::SetLineValues(uint8_t scr, uint8_t line, String item_name, line_t lin
 
 void Menu::SetFunc1(uint8_t scr, uint8_t line, void *func_p)
 {
-   //if (func_p != NULL)
-  // {
+   if (func_p != NULL)
+   {
         pointf1[scr][line] = func_p;
-   //}
+   }
 }
 
 void Menu::SetFunc1(uint8_t scr, uint8_t line, void (*listener)(void *object), void *object)
@@ -86,10 +124,10 @@ void Menu::SetFunc1(uint8_t scr, uint8_t line, void (*listener)(void *object), v
 
 void Menu::SetFunc2(uint8_t scr, uint8_t line, void *func_p)
 {
-   // if (func_p != NULL)
-    //{
+    if (func_p != NULL)
+    {
         pointf2[scr][line] = func_p;
-   // }
+    }
 }
 
 void Menu::SetFunc2(uint8_t scr, uint8_t line, void (*listener)(void *object), void *object)
@@ -120,8 +158,15 @@ void Menu::SetFunc3(uint8_t scr, uint8_t line, void (*listener)(void *object), v
         return;
     }
 
-    obj_indicator[scr][line] = object;
-    obj_pointf3[scr][line] = listener;
+    if(object!=NULL)
+    {
+        obj_indicator[scr][line] = object;
+    }
+
+    if (listener != NULL)
+    {
+        obj_pointf3[scr][line] = listener;
+    }
 }
 
 bool Menu::CheckFunction1()
