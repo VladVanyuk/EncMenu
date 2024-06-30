@@ -1,12 +1,24 @@
-#include "Arduino.h"
+#include <Arduino.h>
 #include "EncMenu.h"
 
-static void Menu::encIsr()
-{
-    this->enc->tickISR();
-    this->mFlags.menuActive_f = true;
-    MenuDebugPrintln("isr");
-}
+#ifndef CLK
+#define CLK 2
+#endif
+
+#ifndef DT
+#define DT 3
+#endif
+
+#ifndef SW
+#define SW 4
+#endif
+
+// static void Menu::encIsr()
+// {
+//     this->enc->tickISR();
+//     this->mFlags.menuActive_f = true;
+//     MenuDebugPrintln("isr");
+// }
 
 Menu::Menu()
 {
@@ -19,8 +31,8 @@ Menu::Menu()
         MenuDebugPrintln("lcd new");
 
         #if (MENU_ENC_ISR == 1)
-        attachInterrupt(0, encIsr, CHANGE);  
-        attachInterrupt(1, encIsr, CHANGE);
+        // attachInterrupt(0, encIsr, CHANGE);  
+        // attachInterrupt(1, encIsr, CHANGE);
         
         enc = new EncButtonMenu(CLK, DT, SW, INPUT_PULLUP);
         #else

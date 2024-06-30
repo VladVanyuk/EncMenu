@@ -73,6 +73,10 @@ struct MenuLine
 
 typedef struct MenuLine MenuLine_t;
 
+// #ifdef __AVR__
 typedef void (*pointf_t)();
 typedef void (*obj_pointf_t)(void *);
-
+// #else
+// typedef std::function<void(void)> pointf_t;
+// typedef std::function<void(void)> obj_pointf_t;
+// #endif

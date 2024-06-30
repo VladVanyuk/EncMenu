@@ -3,19 +3,13 @@
 
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
-
-#include "EncButton.h"
+#include <EncButton.h>
 
 #include "MenuTypes.h"
 
 
 #define LCD_ROW_COUNT 4
-
-
-
 #define LCD_COL_COUNT 20
-
-
 #define LCD_I2C_ADDRESS 0x27
 
 #ifndef MAX_SCREENS
@@ -51,7 +45,7 @@
 #endif
 
 
-#define ENC_ISR() encIsr()
+// #define ENC_ISR() encIsr()
 
 /**
  * @class Menu
@@ -59,9 +53,9 @@
 class Menu
 {
 private:
-   LiquidCrystal_I2C *_lcd;
+   LiquidCrystal_I2C *_lcd = NULL;
 
-   EncButton *enc;
+   EncButton *enc = NULL;
    //VirtEncButton *enc;
 
    uint8_t const static Screens = (MAX_SCREENS+1);
@@ -246,7 +240,7 @@ public:
    void MenuSwitchToScreen(uint8_t scr);
    void MenuHandler();
 
-   void encIsr();
+   // void encIsr();
    void MenuEncHandler();
 
 private:
